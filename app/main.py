@@ -14,7 +14,7 @@ from app.routers.payment_history import router as payment_history_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
-app = FastAPI(title="Alkhalifa Food Service")
+app = FastAPI(title="Alkhalifa Project")
 
 
 Base.metadata.create_all(bind=engine)
