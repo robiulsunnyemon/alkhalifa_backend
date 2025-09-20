@@ -3,14 +3,14 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main   # main branch এ push হলে trigger হবে
+      - main   # main branch এ push হলে workflow trigger হবে
 
 jobs:
   docker:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
@@ -27,4 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend:${{ github.sha }}
