@@ -12,7 +12,7 @@ from app.payment.bkash.payment_routers import router as payment_routers
 from app.routers.notification import router as notification_router
 from app.routers.payment_history import router as payment_history_router
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.routers.user_me import router as user_me_router
 
 app = FastAPI(title="Alkhalifa backend")
 
@@ -55,3 +55,4 @@ app.include_router(payment_routers)
 app.include_router(food_router)
 app.include_router(notification_router)
 app.include_router(payment_history_router)
+app.include_router(user_me_router)
