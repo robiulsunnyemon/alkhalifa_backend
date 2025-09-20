@@ -1,0 +1,80 @@
+import os
+import uuid
+from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException
+from sqlalchemy.orm import Session
+from app.db.db import get_db
+from app.models.notification import NotificationModel
+from app.schemas.notification import NotificationResponse
+
+router = APIRouter(
+    prefix="/notifications",
+    tags=["Notifications"]
+)
+
+# Upload directory
+UPLOAD_DIR = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "uploads/notification"
+)
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+
+# ---------- Create Notification ----------
+@router.post("/", response_model=NotificationResponse)
+async def create_notification(
+    request: Request,
+    title: str = Form(...),
+    content: str = Form(...),
+    image: UploadFile = None,
+    db: Session = Depends(get_db)
+):
+    image_url = None
+    if image and image.filename:
+        file_ext = image.filename.split(".")[-1]
+        unique_filename = f"{uuid.uuid4()}.{file_ext}"
+        file_path = os.path.join(UPLOAD_DIR, unique_filename)
+
+        with open(file_path, "wb") as f:
+            f.write(await image.read())
+
+        base_url = str(request.base_url)
+        image_url = f"{base_url}uploads/notification/{unique_filename}"
+
+    db_notification = NotificationModel(
+        title=title,
+        content=content,
+        image=image_url
+    )
+    db.add(db_notification)
+    db.commit()
+    db.refresh(db_notification)
+    return db_notification
+
+
+# ---------- Get All Notifications ----------
+@router.get("/", response_model=list[NotificationResponse])
+async def get_all_notifications(db: Session = Depends(get_db)):
+    notifications = db.query(NotificationModel).order_by(NotificationModel.created_at.desc()).all()
+    return notifications
+
+
+# ---------- Get Single Notification ----------
+@router.get("/{notification_id}", response_model=NotificationResponse)
+async def get_notification(notification_id: int, db: Session = Depends(get_db)):
+    notification = db.query(NotificationModel).filter(NotificationModel.id == notification_id).first()
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+    return notification
+
+
+
+# ---------- Delete Notification ----------
+@router.delete("/{notification_id}")
+async def delete_notification(notification_id: int, db: Session = Depends(get_db)):
+    notification = db.query(NotificationModel).filter(NotificationModel.id == notification_id).first()
+    if not notification:
+        raise HTTPException(status_code=404, detail="Notification not found")
+
+    db.delete(notification)
+    db.commit()
+    return {"message": "Notification deleted successfully"}

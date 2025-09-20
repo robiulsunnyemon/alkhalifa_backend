@@ -1,0 +1,44 @@
+# app/schemas/food.py
+
+from pydantic import BaseModel
+from typing import Optional
+
+class FoodBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    food_image_url: Optional[str] = None
+    price: float
+    per_person: Optional[int] = None
+    category_id: int
+
+class FoodCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    per_person: Optional[int] = None
+    category_id: int
+
+class FoodUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    per_person: Optional[int] = None
+    food_image_url: Optional[str] = None
+    category_id: Optional[int] = None
+
+class Category(BaseModel):
+    name: str
+
+class Rating(BaseModel):
+    average_rating: float = 0.0   # default value set করলাম
+
+    class Config:
+        from_attributes = True
+
+class FoodResponse(FoodBase):
+    id: int
+    category: Optional[Category]
+    food_ratings: Optional[Rating] = None   # single rating object
+
+    class Config:
+        from_attributes = True
