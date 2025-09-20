@@ -12,9 +12,10 @@ router = APIRouter(prefix="/orders", tags=["Orders"])
 
 # Create Order
 @router.post("/", response_model=OrderResponse, status_code=status.HTTP_201_CREATED)
-def create_order(order_data: OrderCreate, db: Session = Depends(get_db)):
+def create_order(order_data: OrderCreate, db: Session = Depends(get_db),user: dict = Depends(get_user_info)):
+    user_id = user["user_id"]
     new_order = OrderModel(
-        user_id=order_data.user_id,
+        user_id=user_id,
         total_amount=order_data.total_amount,
         delivery_address=order_data.delivery_address,
         delivery_full_address=order_data.delivery_full_address,

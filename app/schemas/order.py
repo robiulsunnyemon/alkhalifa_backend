@@ -37,7 +37,6 @@ class OrderItemResponse(BaseModel):
 
 # ---- Order Schemas ----
 class OrderBase(BaseModel):
-    user_id: int
     total_amount: float
     delivery_address: str
     delivery_full_address: str
