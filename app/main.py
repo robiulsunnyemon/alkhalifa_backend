@@ -17,7 +17,7 @@ from app.routers.variation_of_food import router as variation_of_food_router
 
 app = FastAPI(title="Alkhalifa backend")
 
-Base.metadata.drop_all(bind=engine)
+# Base.metadata.drop_all(bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
