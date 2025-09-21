@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3463628e-7ce7-4261-b364-bfbf0aba408a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/schemas/category_for_products.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/routers/food_category.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/routers/food_category.py" afterDir="false" />
-    </list>
+    <list default="true" id="3463628e-7ce7-4261-b364-bfbf0aba408a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -16,7 +16,7 @@ class Product(BaseModel):
     description: Optional[str] = None
     food_image_url: Optional[str] = None
     price: float
-    food_ratings: Optional[Rating] = None  # single rating object
+    food_ratings: Optional[Rating] = None  
 
 
 class CategoryResponseWithFood(BaseModel):
