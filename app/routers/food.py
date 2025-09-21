@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.food import FoodModel
 from app.schemas.food import FoodCreate, FoodUpdate, FoodResponse
+from app.models.food_rating import FoodRatingModel
 
 router = APIRouter(
     prefix="/foods",
@@ -50,6 +51,19 @@ async def create_food(
     )
     db.add(db_food)
     db.commit()
+
+    food_rating = db.query(FoodRatingModel).filter(FoodRatingModel.food_id == db_food.id).first()
+
+    if not food_rating:
+        food_rating = FoodRatingModel(
+            food_id=db_food.id,
+            total_ratings=5,
+            total_rating_users=1,
+            average_rating=5
+        )
+        db.add(food_rating)
+        db.commit()
+
     db.refresh(db_food)
     return db_food
 
