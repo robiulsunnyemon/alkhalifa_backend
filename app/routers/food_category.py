@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException
 from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.food_category import FoodCategoryModel
+from app.schemas.category_for_products import CategoryResponseWithFood
 from app.schemas.food_category import FoodCategoryCreate, FoodCategoryUpdate, FoodCategoryResponse
 from typing import List
 
@@ -91,6 +92,22 @@ async def get_category(category_id: int, db: Session = Depends(get_db)):
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     return category
+
+
+
+# ---------- Get Product by name ----------
+@router.get("/{category_name}", response_model=CategoryResponseWithFood,status_code=status.HTTP_200_OK)
+async def get_category_name(category_name: str, db: Session = Depends(get_db)):
+    category = db.query(FoodCategoryModel).filter(FoodCategoryModel.name == category_name).first()
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
+
+
+
+
+
+
 
 
 # ---------- Update ----------
