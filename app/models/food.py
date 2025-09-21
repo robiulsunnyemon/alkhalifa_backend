@@ -21,3 +21,4 @@ class FoodModel(Base):
     cart=relationship("CartModel", back_populates="food",cascade="all, delete-orphan")
     food_ratings = relationship("FoodRatingModel", back_populates="food", uselist=False,cascade="all, delete-orphan")
     order_items=relationship("OrderItemModel", back_populates="food",cascade="all, delete-orphan")
+    variations=relationship("VariationOfFoodModel", back_populates="food",cascade="all, delete-orphan")

@@ -42,9 +42,7 @@ class LoginUserModel(BaseModel):
 class UserUpdate(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
-    email: Optional[EmailStr]
     city: Optional[str]
     district: Optional[str]
     address: Optional[str]
     phone_number: Optional[str]
-    password: Optional[str]

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,ConfigDict
 from typing import Optional
 from datetime import datetime
 from typing import List
@@ -7,8 +7,12 @@ from typing import List
 class Rating(BaseModel):
     average_rating: float = 0.0
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
+
+class VariationOfFoodResponse(BaseModel):
+    name: Optional[str]
+    price: Optional[float]
 
 
 class Product(BaseModel):
@@ -16,8 +20,10 @@ class Product(BaseModel):
     description: Optional[str] = None
     food_image_url: Optional[str] = None
     price: float
-    food_ratings: Optional[Rating] = None  
-
+    food_ratings: Optional[Rating] = None
+    create_time: Optional[datetime] = None
+    update_time: Optional[datetime] = None
+    variations: List[Optional[VariationOfFoodResponse]] = []
 
 class CategoryResponseWithFood(BaseModel):
     id: int

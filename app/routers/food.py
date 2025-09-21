@@ -7,6 +7,7 @@ from app.models.food import FoodModel
 from app.schemas.food import FoodCreate, FoodUpdate, FoodResponse
 from app.models.food_rating import FoodRatingModel
 from typing import List
+from app.models.variation_of_food import VariationOfFoodModel
 
 
 router = APIRouter(
@@ -50,6 +51,15 @@ async def create_food(
         food_image_url=image_url
     )
     db.add(db_food)
+    db.commit()
+
+    variation_of_food = VariationOfFoodModel(
+        name="For 1 person",
+        price=price,
+        food_id=db_food.id,
+    )
+
+    db.add(variation_of_food)
     db.commit()
 
     food_rating = db.query(FoodRatingModel).filter(FoodRatingModel.food_id == db_food.id).first()
@@ -96,6 +106,14 @@ async def create_food_bulk(food_data: List[FoodCreate], db: Session = Depends(ge
             average_rating=5
         )
         db.add(food_rating)
+        db.commit()
+        variation_of_food = VariationOfFoodModel(
+            name="For 1 person",
+            price=item.price,
+            food_id=db_food.id,
+        )
+
+        db.add(variation_of_food)
         db.commit()
 
         created_foods.append(db_food)

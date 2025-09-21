@@ -1,7 +1,7 @@
 # app/schemas/food.py
-
-from pydantic import BaseModel
-from typing import Optional
+from datetime import datetime
+from pydantic import BaseModel,ConfigDict
+from typing import Optional, List
 
 class FoodBase(BaseModel):
     name: str
@@ -30,13 +30,20 @@ class Category(BaseModel):
 class Rating(BaseModel):
     average_rating: float = 0.0   # default value set করলাম
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
+
+
+
+class VariationOfFoodResponse(BaseModel):
+    name: Optional[str]
+    price: Optional[float]
 
 class FoodResponse(FoodBase):
     id: int
     category: Optional[Category]
-    food_ratings: Optional[Rating] = None   # single rating object
+    food_ratings: Optional[Rating] = None
+    create_time: Optional[datetime] = None
+    update_time: Optional[datetime] = None
+    variations: List[Optional[VariationOfFoodResponse]] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

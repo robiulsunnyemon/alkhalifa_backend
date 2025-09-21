@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel,ConfigDict
 from typing import List, Optional
 from datetime import datetime
 
@@ -31,8 +31,7 @@ class OrderItemResponse(BaseModel):
     food: Optional[Food] = None
 
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ---- Order Schemas ----
@@ -52,5 +51,4 @@ class OrderResponse(OrderBase):
     updated_at: datetime
     order_items: List[OrderItemResponse] = []
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
