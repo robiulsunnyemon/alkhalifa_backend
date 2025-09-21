@@ -41,7 +41,7 @@ async def add_or_update_cart(
 
 
 # ---------- Decrease Cart Item ----------
-@router.post("/{cart_id}/decrease", response_model=CartResponse)
+@router.post("/{cart_id}/decrease", response_model=CartResponse,status_code=status.HTTP_201_CREATED)
 async def decrease_cart_item(
     cart_id: int,
     db: Session = Depends(get_db),
@@ -68,7 +68,7 @@ async def decrease_cart_item(
 
 
 # ---------- Get all cart items for current user ----------
-@router.get("/me", response_model=List[CartResponse])
+@router.get("/me", response_model=List[CartResponse],status_code=status.HTTP_200_OK)
 async def get_cart_for_current_user(
     db: Session = Depends(get_db),
     user: dict = Depends(get_user_info)

@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException,status
 from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.notification import NotificationModel
@@ -20,7 +20,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 # ---------- Create Notification ----------
-@router.post("/", response_model=NotificationResponse)
+@router.post("/", response_model=NotificationResponse,status_code=status.HTTP_201_CREATED)
 async def create_notification(
     request: Request,
     title: str = Form(...),
@@ -52,14 +52,14 @@ async def create_notification(
 
 
 # ---------- Get All Notifications ----------
-@router.get("/", response_model=list[NotificationResponse])
+@router.get("/", response_model=list[NotificationResponse],status_code=status.HTTP_200_OK)
 async def get_all_notifications(db: Session = Depends(get_db)):
     notifications = db.query(NotificationModel).order_by(NotificationModel.created_at.desc()).all()
     return notifications
 
 
 # ---------- Get Single Notification ----------
-@router.get("/{notification_id}", response_model=NotificationResponse)
+@router.get("/{notification_id}", response_model=NotificationResponse,status_code=status.HTTP_200_OK)
 async def get_notification(notification_id: int, db: Session = Depends(get_db)):
     notification = db.query(NotificationModel).filter(NotificationModel.id == notification_id).first()
     if not notification:
@@ -69,7 +69,7 @@ async def get_notification(notification_id: int, db: Session = Depends(get_db)):
 
 
 # ---------- Delete Notification ----------
-@router.delete("/{notification_id}")
+@router.delete("/{notification_id}",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_notification(notification_id: int, db: Session = Depends(get_db)):
     notification = db.query(NotificationModel).filter(NotificationModel.id == notification_id).first()
     if not notification:

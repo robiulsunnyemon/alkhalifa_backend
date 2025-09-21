@@ -1,12 +1,13 @@
 
 import os
 import uuid
-from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException
+from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException,status
 from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.food_category import FoodCategoryModel
 from app.schemas.food_category import FoodCategoryCreate, FoodCategoryUpdate, FoodCategoryResponse
 from typing import List
+
 
 
 router = APIRouter(
@@ -21,7 +22,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 # ---------- Create ----------
-@router.post("/", response_model=FoodCategoryResponse)
+@router.post("/", response_model=FoodCategoryResponse,status_code=status.HTTP_201_CREATED)
 async def create_food_category(
         request: Request,
         name: str = Form(...),
@@ -56,7 +57,7 @@ async def create_food_category(
 
 
 # ---------- bulk create food categories ----------
-@router.post("/bulk", response_model=List[FoodCategoryResponse])
+@router.post("/bulk", response_model=List[FoodCategoryResponse],status_code=status.HTTP_201_CREATED)
 async def create_food_category_bulk(category_data: List[FoodCategoryCreate], db: Session = Depends(get_db)):
 
     created_categories = []
@@ -77,14 +78,14 @@ async def create_food_category_bulk(category_data: List[FoodCategoryCreate], db:
 
 
 # ---------- Get all ----------
-@router.get("/", response_model=list[FoodCategoryResponse])
+@router.get("/", response_model=list[FoodCategoryResponse],status_code=status.HTTP_200_OK)
 async def get_all_categories(db: Session = Depends(get_db)):
     categories = db.query(FoodCategoryModel).all()
     return categories
 
 
 # ---------- Get single ----------
-@router.get("/{category_id}", response_model=FoodCategoryResponse)
+@router.get("/{category_id}", response_model=FoodCategoryResponse,status_code=status.HTTP_200_OK)
 async def get_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(FoodCategoryModel).filter(FoodCategoryModel.id == category_id).first()
     if not category:
@@ -93,7 +94,7 @@ async def get_category(category_id: int, db: Session = Depends(get_db)):
 
 
 # ---------- Update ----------
-@router.put("/{category_id}", response_model=FoodCategoryResponse)
+@router.put("/{category_id}", response_model=FoodCategoryResponse,status_code=status.HTTP_201_CREATED)
 async def update_category(category_id: int, data: FoodCategoryUpdate, db: Session = Depends(get_db)):
     category = db.query(FoodCategoryModel).filter(FoodCategoryModel.id == category_id).first()
     if not category:
@@ -108,7 +109,7 @@ async def update_category(category_id: int, data: FoodCategoryUpdate, db: Sessio
 
 
 # ---------- Delete ----------
-@router.delete("/{category_id}")
+@router.delete("/{category_id}",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_category(category_id: int, db: Session = Depends(get_db)):
     category = db.query(FoodCategoryModel).filter(FoodCategoryModel.id == category_id).first()
     if not category:

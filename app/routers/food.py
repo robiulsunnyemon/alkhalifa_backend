@@ -1,6 +1,6 @@
 import os
 import uuid
-from fastapi import APIRouter, Depends, UploadFile, Form, HTTPException, Request
+from fastapi import APIRouter, Depends, UploadFile, Form, HTTPException, Request,status
 from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.food import FoodModel
@@ -20,7 +20,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 # ---------- Create ----------
-@router.post("/", response_model=FoodResponse)
+@router.post("/", response_model=FoodResponse,status_code=status.HTTP_201_CREATED)
 async def create_food(
         request: Request,
         name: str = Form(...),
@@ -70,7 +70,7 @@ async def create_food(
 
 ################ bulk product ###########
 
-@router.post("/bulk", response_model=List[FoodResponse])
+@router.post("/bulk", response_model=List[FoodResponse],status_code=status.HTTP_201_CREATED)
 async def create_food_bulk(food_data: List[FoodCreate], db: Session = Depends(get_db)):
 
     created_foods = []
@@ -105,14 +105,14 @@ async def create_food_bulk(food_data: List[FoodCreate], db: Session = Depends(ge
 
 
 # ---------- Get all ----------
-@router.get("/", response_model=list[FoodResponse])
+@router.get("/", response_model=list[FoodResponse],status_code=status.HTTP_200_OK)
 async def get_all_foods(db: Session = Depends(get_db)):
     foods = db.query(FoodModel).all()
     return foods
 
 
 # ---------- Get single ----------
-@router.get("/{food_id}", response_model=FoodResponse)
+@router.get("/{food_id}", response_model=FoodResponse,status_code=status.HTTP_200_OK)
 async def get_food(food_id: int, db: Session = Depends(get_db)):
     food = db.query(FoodModel).filter(FoodModel.id == food_id).first()
     if not food:
@@ -121,7 +121,7 @@ async def get_food(food_id: int, db: Session = Depends(get_db)):
 
 
 # ---------- Update ----------
-@router.put("/{food_id}", response_model=FoodResponse)
+@router.put("/{food_id}", response_model=FoodResponse,status_code=status.HTTP_201_CREATED)
 async def update_food(
         food_id: int,
         data: FoodUpdate,
@@ -140,7 +140,7 @@ async def update_food(
 
 
 # ---------- Delete ----------
-@router.delete("/{food_id}")
+@router.delete("/{food_id}",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_food(food_id: int, db: Session = Depends(get_db)):
     food = db.query(FoodModel).filter(FoodModel.id == food_id).first()
     if not food:

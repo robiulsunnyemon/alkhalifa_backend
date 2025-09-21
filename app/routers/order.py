@@ -40,7 +40,7 @@ def create_order(order_data: OrderCreate, db: Session = Depends(get_db),user: di
 
 
 # Get all orders
-@router.get("/", response_model=List[OrderResponse])
+@router.get("/", response_model=List[OrderResponse],status_code=status.HTTP_200_OK)
 def get_all_orders(db: Session = Depends(get_db)):
     return db.query(OrderModel).all()
 

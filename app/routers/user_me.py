@@ -19,7 +19,7 @@ async def read_user_by_token(db: Session = Depends(get_db),user: dict = Depends(
 
 
 
-@router.put("/update}", response_model=UserRead)
+@router.put("/update}", response_model=UserRead,status_code=status.HTTP_201_CREATED)
 def update_user(user: UserUpdate,user_info: dict = Depends(get_user_info), db: Session = Depends(get_db)):
     user_id = user_info["user_id"]
     db_user = db.query(UserModel).filter(UserModel.id == user_id).first()
