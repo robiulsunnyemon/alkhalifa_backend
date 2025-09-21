@@ -16,7 +16,7 @@ from app.routers.user_me import router as user_me_router
 
 app = FastAPI(title="Alkhalifa backend")
 
-Base.metadata.drop_all(bind=engine)
+# Base.metadata.drop_all(bind=engine)
 
 Base.metadata.create_all(bind=engine)
 
