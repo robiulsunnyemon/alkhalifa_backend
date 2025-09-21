@@ -81,7 +81,7 @@ async def update_food(
     if not food:
         raise HTTPException(status_code=404, detail="Food not found")
 
-    for key, value in data.dict(exclude_unset=True).items():
+    for key, value in data.model_dump(exclude_unset=True).items():
         setattr(food, key, value)
 
     db.commit()

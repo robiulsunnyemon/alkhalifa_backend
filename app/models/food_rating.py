@@ -9,7 +9,7 @@ class FoodRatingModel(Base):
     id = Column(Integer, primary_key=True,index=True)
     total_ratings = Column(Integer)
     total_rating_users=Column(Integer)
-    average_rating = Column(Float)
+    average_rating = Column(Float,default=5.0)
     food_id = Column(Integer, ForeignKey("foods.id", ondelete="CASCADE"))
 
 

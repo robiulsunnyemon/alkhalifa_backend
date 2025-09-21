@@ -26,7 +26,7 @@ async def add_or_update_cart(
     ).first()
 
     if cart_item:
-        cart_item.quantity += cart_product.quantity  # Add quantity from request
+        cart_item.quantity += cart_product.quantity
     else:
         cart_item = CartModel(
             product_id=cart_product.product_id,
@@ -61,7 +61,7 @@ async def decrease_cart_item(
         db.refresh(cart_item)
         return cart_item
     else:
-        # If quantity becomes 0, remove the item
+
         db.delete(cart_item)
         db.commit()
         return {"message": "Cart item removed from cart"}
