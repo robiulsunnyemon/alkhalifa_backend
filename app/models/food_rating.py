@@ -7,8 +7,8 @@ from sqlalchemy.orm import relationship
 class FoodRatingModel(Base):
     __tablename__ = "food_ratings"
     id = Column(Integer, primary_key=True,index=True)
-    total_ratings = Column(Integer)
-    total_rating_users=Column(Integer)
+    total_ratings = Column(Integer,default=5)
+    total_rating_users=Column(Integer,default=1)
     average_rating = Column(Float,default=5.0)
     food_id = Column(Integer, ForeignKey("foods.id", ondelete="CASCADE"))
 

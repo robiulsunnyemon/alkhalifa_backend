@@ -7,8 +7,8 @@ class NotificationModel(Base):
     __tablename__ = 'notifications'
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False, index=True)
-    content = Column(String, nullable=False)
+    title = Column(String, nullable=False, index=True,default='')
+    content = Column(String, nullable=False,default="")
     image = Column(
         String,
         default="https://cdn.pixabay.com/photo/2022/02/08/02/56/shipping-7000647_1280.png",

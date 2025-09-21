@@ -8,21 +8,18 @@ class FoodBase(BaseModel):
     description: Optional[str] = None
     food_image_url: Optional[str] = None
     price: float
-    per_person: Optional[int] = None
     category_id: int
 
 class FoodCreate(BaseModel):
     name: str
     description: Optional[str] = None
     price: float
-    per_person: Optional[int] = None
     category_id: int
 
 class FoodUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = None
-    per_person: Optional[int] = None
     food_image_url: Optional[str] = None
     category_id: Optional[int] = None
 
