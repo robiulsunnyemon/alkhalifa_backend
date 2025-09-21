@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.db.db import get_db
 from app.models.food_category import FoodCategoryModel
 from app.schemas.food_category import FoodCategoryCreate, FoodCategoryUpdate, FoodCategoryResponse
+from typing import List
+
 
 router = APIRouter(
     prefix="/food-categories",
@@ -50,6 +52,28 @@ async def create_food_category(
     db.commit()
     db.refresh(db_category)
     return db_category
+
+
+
+# ---------- bulk create food categories ----------
+@router.post("/bulk", response_model=List[FoodCategoryResponse])
+async def create_food_category_bulk(category_data: List[FoodCategoryCreate], db: Session = Depends(get_db)):
+
+    created_categories = []
+
+    for item in category_data:
+        db_category = FoodCategoryModel(
+            name=item.name,
+            description=item.description,
+            category_image_url=item.category_image_url
+        )
+        db.add(db_category)
+        db.commit()
+        db.refresh(db_category)
+        created_categories.append(db_category)
+
+    return created_categories
+
 
 
 # ---------- Get all ----------

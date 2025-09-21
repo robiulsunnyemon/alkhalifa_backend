@@ -6,6 +6,8 @@ from app.db.db import get_db
 from app.models.food import FoodModel
 from app.schemas.food import FoodCreate, FoodUpdate, FoodResponse
 from app.models.food_rating import FoodRatingModel
+from typing import List
+
 
 router = APIRouter(
     prefix="/foods",
@@ -26,7 +28,7 @@ async def create_food(
         category_id: int = Form(...),
         description: str = Form(None),
         image: UploadFile = None,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
 ):
     image_url = None
     if image and image.filename:
@@ -64,6 +66,42 @@ async def create_food(
 
     db.refresh(db_food)
     return db_food
+
+
+################ bulk product ###########
+
+@router.post("/bulk", response_model=List[FoodResponse])
+async def create_food_bulk(food_data: List[FoodCreate], db: Session = Depends(get_db)):
+
+    created_foods = []
+
+    for item in food_data:
+        # FoodModel instance
+        db_food = FoodModel(
+            name=item.name,
+            description=item.description,
+            price=item.price,
+            category_id=item.category_id,
+            food_image_url=item.food_image_url
+        )
+        db.add(db_food)
+        db.commit()
+        db.refresh(db_food)
+
+        # Default food rating
+        food_rating = FoodRatingModel(
+            food_id=db_food.id,
+            total_ratings=5,
+            total_rating_users=1,
+            average_rating=5
+        )
+        db.add(food_rating)
+        db.commit()
+
+        created_foods.append(db_food)
+
+    return created_foods
+
 
 
 # ---------- Get all ----------
