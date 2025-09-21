@@ -25,7 +25,6 @@ async def create_food(
         price: float = Form(...),
         category_id: int = Form(...),
         description: str = Form(None),
-        per_person: int = Form(None),
         image: UploadFile = None,
         db: Session = Depends(get_db)
 ):
@@ -45,7 +44,6 @@ async def create_food(
         name=name,
         description=description,
         price=price,
-        per_person=per_person,
         category_id=category_id,
         food_image_url=image_url
     )
