@@ -44,7 +44,7 @@ app.add_middleware(
 
 @app.get("/",tags=["Root"])
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello coolify"}
 
 # Routers
 app.include_router(user_router)

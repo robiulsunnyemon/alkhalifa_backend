@@ -28,5 +28,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend-coolify:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/alkhalifa-backend-coolify:${{ github.sha }}
