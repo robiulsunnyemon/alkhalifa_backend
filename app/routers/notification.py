@@ -3,8 +3,9 @@ import uuid
 from fastapi import APIRouter, Depends, UploadFile, Form, Request, HTTPException,status
 from sqlalchemy.orm import Session
 from app.db.db import get_db
+from typing import List
 from app.models.notification import NotificationModel
-from app.schemas.notification import NotificationResponse
+from app.schemas.notification import NotificationResponse, NotificationBase, NotificationCreate
 
 router = APIRouter(
     prefix="/notifications",
@@ -51,8 +52,31 @@ async def create_notification(
     return db_notification
 
 
+
+@router.put("/bulk", response_model=List[NotificationResponse], status_code=status.HTTP_201_CREATED)
+async def bulk_notifications(notifications: List[NotificationCreate], db: Session = Depends(get_db)):
+    db_notifications = [
+        NotificationModel(
+            title=notification.title,
+            content=notification.content,
+            image=notification.image
+        ) for notification in notifications
+    ]
+
+    db.add_all(db_notifications)  # Add all at once
+    db.commit()                  # Single commit
+    for notif in db_notifications:
+        db.refresh(notif)        # Refresh objects to get IDs
+
+    return db_notifications
+
+
+
+
+
+
 # ---------- Get All Notifications ----------
-@router.get("/", response_model=list[NotificationResponse],status_code=status.HTTP_200_OK)
+@router.get("/", response_model=List[NotificationResponse],status_code=status.HTTP_200_OK)
 async def get_all_notifications(db: Session = Depends(get_db)):
     notifications = db.query(NotificationModel).order_by(NotificationModel.created_at.desc()).all()
     return notifications
