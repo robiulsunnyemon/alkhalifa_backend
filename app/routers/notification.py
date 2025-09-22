@@ -53,7 +53,7 @@ async def create_notification(
 
 
 
-@router.put("/bulk", response_model=List[NotificationResponse], status_code=status.HTTP_201_CREATED)
+@router.post("/bulk", response_model=List[NotificationResponse], status_code=status.HTTP_201_CREATED)
 async def bulk_notifications(notifications: List[NotificationCreate], db: Session = Depends(get_db)):
     db_notifications = [
         NotificationModel(
