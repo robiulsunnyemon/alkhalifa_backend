@@ -14,6 +14,7 @@ from app.routers.payment_history import router as payment_history_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.user_me import router as user_me_router
 from app.routers.variation_of_food import router as variation_of_food_router
+from app.routers.menu import router as menu_router
 
 app = FastAPI(title="Alkhalifa backend")
 
@@ -59,3 +60,4 @@ app.include_router(notification_router)
 app.include_router(payment_history_router)
 app.include_router(user_me_router)
 app.include_router(variation_of_food_router)
+app.include_router(menu_router)
