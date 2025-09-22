@@ -9,7 +9,7 @@ from app.schemas.notification import NotificationResponse, NotificationBase, Not
 
 router = APIRouter(
     prefix="/notifications",
-    tags=["Notifications"]
+    tags=["Notification"]
 )
 
 # Upload directory
