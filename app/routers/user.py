@@ -43,7 +43,7 @@ async def registration(user:UserCreate,db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {"message":"A 6 digit OTP has delivered. please check your email"}
+    return {"message":"A 6 digit OTP has delivered. please check your email","email":new_user.email}
 
 
 
@@ -107,7 +107,7 @@ async def resend_otp(user:ResendOTP,db: Session = Depends(get_db)):
     db_user.otp=otp
     db.commit()
     db.refresh(db_user)
-    return {"message":"A 6 digit OTP has delivered. please check your email"}
+    return {"message":"A 6 digit OTP has delivered. please check your email","email":db_user.email}
 
 
 @router.post("/reset_password", status_code=status.HTTP_200_OK)

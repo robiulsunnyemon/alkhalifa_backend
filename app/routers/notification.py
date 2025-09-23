@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.db import get_db
 from typing import List
 from app.models.notification import NotificationModel
-from app.schemas.notification import NotificationResponse, NotificationBase, NotificationCreate
+from app.schemas.notification import NotificationResponse, NotificationCreate
 
 router = APIRouter(
     prefix="/notifications",
